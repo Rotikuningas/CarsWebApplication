@@ -34,7 +34,7 @@ public class CarsController : BaseApiController
 
     
     [HttpPost]
-    public async Task<ActionResult<Car>> PostCar(Car car)
+    public async Task<ActionResult<Car>> CreateCar(Car car)
     {
         _context.Cars.Add(car);
         await _context.SaveChangesAsync();
@@ -43,21 +43,27 @@ public class CarsController : BaseApiController
 
 
     [HttpPut("{id:guid}")]
-    public async Task<IActionResult> PutCar(Guid id, Car car)
+    public async Task<IActionResult> UpdateCar(Guid id, Car car)
     {
-        if (id != car.Id)
-            return BadRequest();
-
         var existingCar = await _context.Cars.FindAsync(id);
 
-        if (existingCar is null)
-            return NotFound();
+        if (existingCar is null) return NotFound();
 
-        _context.Entry(existingCar).CurrentValues.SetValues(car);
+        existingCar.Brand = car.Brand;
+        existingCar.Model = car.Model;
+        existingCar.DoorsNumber = car.DoorsNumber;
+        existingCar.LuggageCapacity = car.LuggageCapacity;
+        existingCar.EngineCapacity = car.EngineCapacity;
+        existingCar.FuelType = car.FuelType;
+        existingCar.ProductionDate = car.ProductionDate;
+        existingCar.AverageFuelConsumption = car.AverageFuelConsumption;
+        existingCar.BodyType = car.BodyType;
+
         await _context.SaveChangesAsync();
 
         return NoContent();
     }
+    
 
 
     [HttpDelete("{id:guid}")]
