@@ -1,0 +1,88 @@
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: rgb(27, 27, 30);
+    color: white;
+}
+
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.navbar {
+    display: flex;
+    gap: 25px;
+    background: rgb(121, 68, 167);
+    padding: 18px;
+    border-radius: 8px;
+    margin-bottom: 30px;
+}
+
+.navbar a {
+    color: rgb(216, 219, 226);
+    text-decoration: none;
+}
+
+.navbar a.active {
+    color: white;
+    font-weight: bold;
+}
+
+h1 {
+    color: rgb(239, 239, 243);
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+li {
+    padding: 12px;
+    margin: 8px 0;
+    background: rgb(169, 188, 208);
+    border-radius: 5px;
+}
+
+button {
+    padding: 9px 15px;
+    margin: 5px;
+    border: none;
+    border-radius: 5px;
+    background: rgb(169, 188, 208);
+    color: white;
+    cursor: pointer;
+}
+
+button:hover {
+    background: rgb(88, 164, 176);
+}
+
+input {
+    display: block;
+    width: 100%;
+    max-width: 400px;
+    padding: 10px;
+    margin: 8px 0 15px;
+    border: 1px solid rgb(11, 11, 77);
+    border-radius: 5px;
+}
+
+form {
+    background: rgb(121, 68, 167);
+    padding: 20px;
+    border-radius: 8px;
+}
+
+label {
+    display: block;
+    margin-bottom: 10px;
+}
