@@ -2,12 +2,28 @@ import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router';
 import type { Car } from '../models/Car';
 import { getCarById } from '../services/carService';
+import axios from 'axios';
+import {
+    useCarUiStore,
+} from '../store/useCarUiStore';
 
 export default function CarDetailsPage() {
     const { id } = useParams();
     const [car, setCar] = useState<Car | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
+
+    const favoriteCarIds =
+        useCarUiStore(
+            (state) =>
+                state.favoriteCarIds,
+        );
+
+    const toggleFavorite =
+        useCarUiStore(
+            (state) =>
+                state.toggleFavorite,
+        );
 
     useEffect(() => {
         const controller = new AbortController();
@@ -18,9 +34,15 @@ export default function CarDetailsPage() {
 
                 const data = await getCarById(id, controller.signal);
                 setCar(data);
-            } catch (err) {
-                if (err instanceof Error && err.name !== 'AbortError') {
-                    setError(err.message);
+            } catch (caughtError) {
+                if (axios.isCancel(caughtError)) {
+                    return;
+                }
+
+                if (caughtError instanceof Error) {
+                    setError(caughtError.message);
+                } else {
+                    setError('Wystapil nieznany blad.');
                 }
             } finally {
                 if (!controller.signal.aborted) {
@@ -38,9 +60,30 @@ export default function CarDetailsPage() {
     if (error) return <p>Błąd: {error}</p>;
     if (!car) return <p>Nie znaleziono samochodu.</p>;
 
+    const isFavorite =
+        favoriteCarIds.includes(
+            car.id,
+        );
+
     return (
         <div>
             <h1>{car.brand} {car.model}</h1>
+            
+            <button
+                type="button"
+                className={
+                    isFavorite
+                        ? 'favorite-button active-favorite'
+                        : 'favorite-button'
+                }
+                onClick={() =>
+                    toggleFavorite(car.id)
+                }
+            >
+                {isFavorite
+                    ? 'Ulubiony'
+                    : 'Ulubione'}
+            </button>
 
             <p>Liczba drzwi: {car.doorsNumber}</p>
             <p>Pojemność bagażnika: {car.luggageCapacity} l</p>

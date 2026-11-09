@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import type { Car, NewCar } from '../models/Car';
 import { getCarById, updateCar } from '../services/carService';
+import axios from 'axios';
 
 export default function EditCarPage() {
     const { id } = useParams();
@@ -19,9 +20,15 @@ export default function EditCarPage() {
 
                 const data = await getCarById(id, controller.signal);
                 setCar(data);
-            } catch (err) {
-                if (err instanceof Error && err.name !== 'AbortError') {
-                    setError(err.message);
+            } catch (caughtError) {
+                if (axios.isCancel(caughtError)) {
+                    return;
+                }
+
+                if (caughtError instanceof Error) {
+                    setError(caughtError.message);
+                } else {
+                    setError('Wystapil nieznany blad.');
                 }
             }
         }
